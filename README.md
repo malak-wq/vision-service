@@ -1,7 +1,7 @@
 
 # 🌾 WAHA KUN AI - Vision Service
 
-**AI-Powered Irrigation Problem Diagnosis System**
+> AI-Powered Irrigation Problem Diagnosis System
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.139.0-green.svg)](https://fastapi.tiangolo.com/)
@@ -12,160 +12,170 @@
 
 ## 📋 **Table of Contents**
 
-- [Project Overview](#project-overview)
-- [Key Features](#key-features)
-- [System Architecture](#system-architecture)
+- [Overview](#overview)
+- [Features](#features)
+- [Architecture](#architecture)
 - [Project Structure](#project-structure)
-- [Technologies Used](#technologies-used)
-- [Installation & Setup](#installation--setup)
+- [Technologies](#technologies)
+- [Installation](#installation)
 - [Run Commands](#run-commands)
 - [API Endpoints](#api-endpoints)
-- [API Response Examples](#api-response-examples)
+- [Response Examples](#response-examples)
 - [Severity Levels](#severity-levels)
 - [Testing](#testing)
 - [Docker Deployment](#docker-deployment)
 - [Troubleshooting](#troubleshooting)
+- [Contributors](#contributors)
 
 ---
 
-## 🎯 **Project Overview**
+## 1. Overview
 
-**WAHA KUN AI Vision Service** is a Computer Vision system that analyzes images of irrigation systems and provides a complete diagnosis in Arabic.
+WAHA KUN AI Vision Service is a **Computer Vision system** that analyzes images of irrigation systems and provides a **complete diagnosis in Arabic**.
 
-### **What It Does:**
+### What It Does
 
 | Input | Process | Output |
 |-------|---------|--------|
-| 📸 Image of irrigation system | AI Model (EfficientNet) analyzes the image | Complete diagnosis in Arabic |
+| 📸 Image of irrigation system | 🤖 EfficientNet AI Model | 📋 Complete diagnosis in Arabic |
 
-### **Diagnosis Includes:**
+### Diagnosis Includes
 
 | Field | Description | Example |
 |-------|-------------|---------|
-| **Problem** | Problem name in Arabic | "تلف في أنبوب المياه" |
-| **Problem Code** | Problem code in English | `Pipe_Damage` |
-| **Confidence** | AI confidence percentage | "77.39%" |
+| **Problem** | Arabic name | "تلف في أنبوب المياه" |
+| **Problem Code** | English code | `Pipe_Damage` |
+| **Confidence** | AI certainty | 77.39% |
 | **Severity** | Urgency level | "حرجة" (Critical) |
-| **Recommendation** | What to do | "يوصى بإيقاف مصدر المياه فوراً" |
-| **Explanation** | Why AI made this diagnosis | "اكتشف النموذج وجود تلف..." |
-| **Repair Steps** | Step-by-step guide | 7 step repair process |
+| **Recommendation** | What to do | "يوصى بإيقاف مصدر المياه" |
+| **Explanation** | Why AI decided | "اكتشف النموذج وجود تلف..." |
+| **Repair Steps** | Step-by-step guide | 7 steps |
 
 ---
 
-## ✨ **Key Features**
+## 2. Features
+
+### Core Features
 
 | Feature | Description |
 |---------|-------------|
-| **🖼️ Image Analysis** | Analyzes images of irrigation systems |
-| **🤖 AI Model** | Uses EfficientNet deep learning model |
-| **📊 Confidence Scoring** | Shows AI confidence percentage (0-100%) |
-| **⚠️ Severity Assessment** | 5 levels from Critical to Minor |
-| **📝 Repair Steps** | Step-by-step repair instructions |
-| **🔍 Quality Check** | Validates image quality automatically |
-| **✨ Image Enhancement** | Auto-enhances poor quality images |
-| **⚡ Async Processing** | RabbitMQ for background processing |
-| **🐳 Docker Support** | Easy deployment with Docker |
-| **🌐 Arabic Output** | All responses in Arabic |
-| **🚫 No Problem Detection** | Refuses images with no clear problem |
+| 🖼️ **Image Analysis** | Analyze irrigation system images |
+| 🤖 **AI Model** | EfficientNet deep learning model (90%+ accuracy) |
+| 📊 **Confidence Scoring** | 0-100% confidence percentage |
+| ⚠️ **Severity Assessment** | 5 levels from Critical to Minor |
+| 📝 **Repair Steps** | Detailed step-by-step instructions |
+| 🔍 **Quality Check** | Automatic image validation |
+| ✨ **Image Enhancement** | Auto-enhance poor quality images |
+
+### Additional Features
+
+| Feature | Description |
+|---------|-------------|
+| ⚡ **Async Processing** | RabbitMQ for background tasks |
+| 🐳 **Docker Support** | Easy deployment with Docker |
+| 🌐 **Arabic Output** | All responses in Arabic |
+| 🚫 **No Problem Detection** | Refuses unclear/no-problem images |
+| 📚 **RAG System** | Dynamic recommendations from knowledge docs |
 
 ---
 
-## 🏗️ **System Architecture**
-┌─────────────────────────────────────────────────────────────────────────┐
-│ WAHA KUN AI Vision Service │
-├─────────────────────────────────────────────────────────────────────────┤
-│ │
-│ ┌─────────────────────────────────────────────────────────────────┐ │
-│ │ API Layer (FastAPI) │ │
-│ │ • POST /api/v1/predict → Synchronous prediction │ │
-│ │ • POST /api/v1/predict-async → Asynchronous prediction │ │
-│ │ • GET /health → Health check │ │
-│ │ • GET / → Service info │ │
-│ │ • GET /docs → Swagger documentation │ │
-│ └─────────────────────────────────────────────────────────────────┘ │
-│ │ │
-│ ▼ │
-│ ┌─────────────────────────────────────────────────────────────────┐ │
-│ │ Core Layer (Business Logic) │ │
-│ │ • model.py → AI Model (EfficientNet) │ │
-│ │ • severity.py → Basic severity calculation │ │
-│ │ • severity_enhanced.py → Enhanced severity (7 factors) │ │
-│ │ • problem_info.py → Knowledge base │ │
-│ │ • knowledge_base.py → RAG system │ │
-│ └─────────────────────────────────────────────────────────────────┘ │
-│ │ │
-│ ▼ │
-│ ┌─────────────────────────────────────────────────────────────────┐ │
-│ │ Infrastructure Layer │ │
-│ │ • config.py → Configuration management │ │
-│ │ • logger.py → Logging setup │ │
-│ │ • queue_broker.py → RabbitMQ connection │ │
-│ │ • utils.py → Image processing utilities │ │
-│ │ • validators.py → File validation │ │
-│ └─────────────────────────────────────────────────────────────────┘ │
-│ │ │
-│ ▼ │
-│ ┌─────────────────────────────────────────────────────────────────┐ │
-│ │ Worker Layer (Background) │ │
-│ │ • worker.py → Background task processing │ │
-│ │ • RabbitMQ → Message queue for async processing │ │
-│ └─────────────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────────────┘
+## 3. Architecture
+
+### System Layers
+┌─────────────────────────────────────────────────────────────────┐
+│ API Layer │
+│ POST /predict | POST /predict-async | GET /health │
+├─────────────────────────────────────────────────────────────────┤
+│ Application Layer │
+│ Prediction Service | Severity Service | RAG Service │
+├─────────────────────────────────────────────────────────────────┤
+│ Core Layer │
+│ Entities | Interfaces | Enums | Value Objects │
+├─────────────────────────────────────────────────────────────────┤
+│ Infrastructure Layer │
+│ AI Model | RabbitMQ | Repository | Storage │
+├─────────────────────────────────────────────────────────────────┤
+│ Shared Layer │
+│ Config | Logger | Validators | Exceptions │
+├─────────────────────────────────────────────────────────────────┤
+│ Worker Layer │
+│ Background Task Processing | RabbitMQ Consumer │
+└─────────────────────────────────────────────────────────────────┘
 
 text
 
+### Layer Responsibilities
+
+| Layer | Responsibility | Key Files |
+|-------|---------------|-----------|
+| **API** | Endpoints, routing, schemas | `api/routes.py`, `api/app.py` |
+| **Application** | Business logic orchestration | `application/services/` |
+| **Core** | Domain entities and interfaces | `core/entities/`, `core/interfaces/` |
+| **Infrastructure** | External dependencies | `infrastructure/models/`, `infrastructure/messaging/` |
+| **Shared** | Cross-cutting concerns | `shared/config.py`, `shared/logger.py` |
+| **Worker** | Background processing | `worker/worker.py` |
+
 ---
 
-## 📂 **Project Structure**
-GRADUATION_PROJECT/
-└── VisionService/
-├── docker/ # Docker files
-│ ├── Dockerfile
-│ └── docker-compose.yml
+## 4. Project Structure
+vision-service/
 │
-├── models/ # AI Model
-│ └── efficientnet_waha_kun.keras
-│
-├── test_images/ # Test images
-├── uploads/ # Temporary uploads
-├── logs/ # Log files
-│
-└── VisionService/ # Main Python package
-│
-├── API/ # API Layer (FastAPI)
+├── api/ # API Layer (FastAPI)
 │ ├── init.py
 │ ├── app.py # Main entry point
 │ ├── routes.py # API endpoints
-│ ├── schemas.py # Data models
+│ ├── schemas.py # Pydantic models
 │ ├── dependencies.py # Dependency injection
-│ └── middleware.py # CORS middleware
+│ └── middleware.py # CORS, logging
 │
-├── Core/ # Core Business Logic
-│ ├── init.py
-│ ├── model.py # AI Model loading & prediction
-│ ├── severity.py # Basic severity calculation
-│ ├── severity_enhanced.py # Enhanced severity (7 factors)
-│ ├── problem_info.py # Knowledge database
-│ ├── knowledge_base.py # RAG system
-│ └── interfaces.py # Interfaces for testing
+├── application/ # Application Layer
+│ └── services/
+│ ├── prediction_service.py # Main prediction logic
+│ ├── severity_service.py # Severity calculation
+│ └── recommendation_service.py # RAG recommendation
 │
-├── Infrastructure/ # External Dependencies
-│ ├── init.py
+├── core/ # Core Layer
+│ ├── entities/
+│ │ └── problem.py # Problem entity
+│ │
+│ ├── interfaces/
+│ │ ├── i_predictor.py # Interface for prediction
+│ │ ├── i_severity_calculator.py # Interface for severity
+│ │ └── i_recommendation_provider.py # Interface for RAG
+│ │
+│ ├── enums/
+│ │ ├── problem_code.py # Problem types enum
+│ │ ├── severity_level.py # Severity levels enum
+│ │ └── status_code.py # Response status enum
+│ │
+│ └── value_objects/
+│ ├── confidence.py # Confidence value object
+│ └── diagnosis_result.py # Diagnosis result DTO
+│
+├── infrastructure/ # Infrastructure Layer
+│ ├── messaging/
+│ │ ├── rabbitmq_consumer.py # RabbitMQ consumer
+│ │ └── rabbitmq_publisher.py # RabbitMQ publisher
+│ │
+│ ├── models/
+│ │ └── efficientnet_model.py # AI model wrapper
+│ │
+│ ├── storage/
+│ │ ├── file_storage.py # Upload/delete files
+│ │ └── image_processor.py # Image processing
+│ │
+│ └── repositories/
+│ └── problem_repository.py # Problem database access
+│
+├── shared/ # Shared Layer
 │ ├── config.py # Configuration
 │ ├── logger.py # Logging setup
-│ ├── queue_broker.py # RabbitMQ connection
-│ ├── utils.py # Image processing utilities
-│ └── validators.py # File validation
+│ ├── validators.py # File validation
+│ ├── exceptions.py # Custom exceptions
+│ └── constants.py # Shared constants
 │
-├── Shared/ # Shared Constants
-│ ├── init.py
-│ ├── constants.py # Shared constants
-│ ├── enums.py # Enumerations
-│ └── exceptions.py # Custom exceptions
-│
-├── Worker/ # Background Worker
-│ ├── init.py
-│ └── worker.py # Async task processor
+├── worker/ # Worker Layer
+│ └── worker.py # Background task processor
 │
 ├── knowledge_docs/ # RAG Knowledge Documents
 │ ├── pipe_damage.txt
@@ -173,16 +183,34 @@ GRADUATION_PROJECT/
 │ ├── blockage.txt
 │ └── expert_advice.txt
 │
+├── docker/ # Docker files
+│ ├── Dockerfile
+│ └── docker-compose.yml
+│
+├── models/ # AI Model files
+│ └── efficientnet_waha_kun.keras
+│
+├── tests/ # Test folder
+│ ├── test_api.py
+│ ├── test_model.py
+│ └── test_severity.py
+│
+├── logs/ # Log files
+├── uploads/ # Temporary uploads
+├── test_images/ # Test images
+│
 ├── .env # Environment variables
 ├── .env.example # Environment template
 ├── .gitignore # Git ignore
-└── requirements.txt # Python dependencies
+├── requirements.txt # Dependencies
+├── main.py # Entry point (optional)
+└── README.md # Documentation
 
 text
 
 ---
 
-## 🛠️ **Technologies Used**
+## 5. Technologies
 
 | Category | Technology | Version |
 |----------|------------|---------|
@@ -191,115 +219,78 @@ text
 | **AI/ML** | TensorFlow | 2.21.0 |
 | **AI Model** | EfficientNet | Pre-trained |
 | **Image Processing** | Pillow | 12.3.0 |
-| **Numerical Computing** | NumPy | 2.4.6 |
+| **Numerical** | NumPy | 2.4.6 |
 | **Message Queue** | RabbitMQ | 3.x |
-| **Async Communication** | Pika | 1.3.2 |
-| **Containerization** | Docker | Latest |
-| **Logging** | Python Logging | Built-in |
+| **Async** | Pika | 1.3.2 |
+| **Container** | Docker | Latest |
+| **RAG** | ChromaDB | 0.5.0 |
 
 ---
 
-## 🚀 **Installation & Setup**
+## 6. Installation
 
-### **Prerequisites**
+### Prerequisites
 
-- ✅ Python 3.10 or higher
-- ✅ Docker Desktop (for RabbitMQ)
-- ✅ Git
+- Python 3.10+
+- Docker Desktop (for RabbitMQ)
+- Git
 
-### **Step 1: Clone the Repository**
+### Steps
 
 ```bash
+# 1. Clone the repository
 git clone https://github.com/malak-wq/vision-service.git
 cd vision-service
-Step 2: Create and Activate Virtual Environment
-bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
 
-# Linux/Mac
-python3 -m venv venv
-source venv/bin/activate
-Step 3: Install Dependencies
-bash
+# 2. Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate          # Linux/Mac
+# venv\Scripts\activate           # Windows
+
+# 3. Install dependencies
 pip install -r requirements.txt
-Step 4: Set Up Environment Variables
-bash
-# Copy the example environment file
+
+# 4. Copy environment file
 cp .env.example .env
-Step 5: Start RabbitMQ
-bash
-# Start RabbitMQ container
+
+# 5. Start RabbitMQ
 docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:management
-▶️ Run Commands
-Option 1: Run with Docker (Recommended)
+7. Run Commands
+Option 1: Docker (Recommended)
 bash
 # Navigate to project
 cd D:\Graduation_Project\VisionService
 
-# Build and run everything
+# Build and run
 docker-compose -f docker/docker-compose.yml up --build
 
 # Run in background
 docker-compose -f docker/docker-compose.yml up -d --build
 
-# Stop everything
+# Stop
 docker-compose -f docker/docker-compose.yml down
-Option 2: Run Locally
-Terminal 1: Run API
+Option 2: Local Development
+Terminal 1 - API
 bash
-# Navigate to project
 cd D:\Graduation_Project\VisionService
-
-# Activate virtual environment
 venv\Scripts\activate
-
-# Set PYTHONPATH
 $env:PYTHONPATH = "D:\Graduation_Project\VisionService"
-
-# Run the API
-uvicorn VisionService.API.app:app --host 127.0.0.1 --port 8001
-Terminal 2: Run Worker
+uvicorn api.app:app --host 127.0.0.1 --port 8001
+Terminal 2 - Worker
 bash
-# Navigate to project
 cd D:\Graduation_Project\VisionService
-
-# Activate virtual environment
 venv\Scripts\activate
-
-# Set PYTHONPATH
 $env:PYTHONPATH = "D:\Graduation_Project\VisionService"
-
-# Run the worker
-python -m VisionService.Worker.worker
-📡 API Endpoints
+python -m worker.worker
+8. API Endpoints
 Method	Endpoint	Description
 GET	/health	Service health check
 GET	/	Service information
 POST	/api/v1/predict	Synchronous prediction (1-3s)
 POST	/api/v1/predict-async	Asynchronous prediction (RabbitMQ)
 GET	/docs	Swagger API documentation
-📊 API Response Examples
-1. Health Check
-bash
-curl http://localhost:8001/health
-Response:
-
-json
-{
-  "status": "healthy",
-  "service": "vision-service",
-  "version": "1.0.0",
-  "model_loaded": true,
-  "rabbitmq": "connected",
-  "timestamp": "2026-07-24T10:00:00.000000"
-}
-2. Synchronous Prediction (Success)
-bash
-curl -X POST -F "file=@test_images/pipe_damage.jpg" http://localhost:8001/api/v1/predict
-Response:
-
+9. Response Examples
+✅ Success Response
 json
 {
   "status": "success",
@@ -318,22 +309,27 @@ json
     "اختبار شبكة الري.",
     "التأكد من عدم وجود أي تسرب."
   ],
-  "timestamp": "2026-07-24T10:00:00.000000"
+  "timestamp": "2026-07-24T10:00:00"
 }
-3. Refused Response (No Problem Detected)
-bash
-curl -X POST -F "file=@test_images/no_problem.jpg" http://localhost:8001/api/v1/predict
-Response:
-
+❌ Refused Response (No Problem)
 json
 {
   "status": "refused",
   "message": "لم يتم الكشف عن مشكلة واضحة في الصورة.",
   "confidence": "45.23%",
   "suggestion": "يرجى رفع صورة توضح مكان المشكلة بشكل أفضل.",
-  "timestamp": "2026-07-24T10:00:00.000000"
+  "timestamp": "2026-07-24T10:00:00"
 }
-📊 Severity Levels
+⚠️ Uncertain Response
+json
+{
+  "status": "uncertain",
+  "message": "الصورة غير واضحة أو لا تظهر مشكلة محددة بوضوح.",
+  "confidence": "58.00%",
+  "suggestion": "يرجى رفع صورة أوضح أو التأكد من وجود مشكلة.",
+  "timestamp": "2026-07-24T10:00:00"
+}
+10. Severity Levels
 Level (Arabic)	Level (English)	Urgency
 حرجة جداً	Very Critical	Within 1 hour
 حرجة	Critical	Within 4 hours
@@ -344,20 +340,26 @@ Level (Arabic)	Level (English)	Urgency
 بسيطة	Minor	Next maintenance
 بسيطة جداً	Very Minor	Schedule later
 غير مؤثرة	Negligible	No action needed
-🧪 Testing
+11. Testing
 bash
-# 1. Health Check
+# Health check
 curl http://localhost:8001/health
 
-# 2. Synchronous Prediction
-curl -X POST -F "file=@test_images/pipe_damage.jpg" http://localhost:8001/api/v1/predict
+# Synchronous prediction
+curl -X POST -F "file=@test_images/pipe_damage.jpg" \
+  http://localhost:8001/api/v1/predict
 
-# 3. Asynchronous Prediction
-curl -X POST -F "file=@test_images/pipe_damage.jpg" http://localhost:8001/api/v1/predict-async
+# Asynchronous prediction
+curl -X POST -F "file=@test_images/pipe_damage.jpg" \
+  http://localhost:8001/api/v1/predict-async
 
-# 4. Swagger UI
+# Swagger UI
 # Open in browser: http://localhost:8001/docs
-🐳 Docker Deployment
+
+# RabbitMQ UI
+# Open in browser: http://localhost:15672
+# Login: guest / guest
+12. Docker Deployment
 bash
 # Build and run
 docker-compose -f docker/docker-compose.yml up --build
@@ -365,16 +367,52 @@ docker-compose -f docker/docker-compose.yml up --build
 # Run in background
 docker-compose -f docker/docker-compose.yml up -d --build
 
+# View logs
+docker-compose -f docker/docker-compose.yml logs -f
+
 # Stop containers
 docker-compose -f docker/docker-compose.yml down
-❌ Troubleshooting
-1. ModuleNotFoundError
+
+# Stop and remove volumes
+docker-compose -f docker/docker-compose.yml down -v
+13. Troubleshooting
+ModuleNotFoundError
 bash
 $env:PYTHONPATH = "D:\Graduation_Project\VisionService"
-2. Port 8001 Already in Use
+Port 8001 in Use
 bash
 netstat -ano | findstr :8001
 taskkill /PID [PID] /F
-3. RabbitMQ Connection Refused
+RabbitMQ Connection Refused
 bash
 docker start rabbitmq
+Model File Not Found
+bash
+# Place your model in the models folder
+ls models/efficientnet_waha_kun.keras
+Reinstall Dependencies
+bash
+pip install --no-cache-dir -r requirements.txt
+14. Contributors
+Name	Role	GitHub
+Malak Ragab	Developer	@malak-wq
+📄 License
+MIT License
+
+⭐ Star the Project
+If you found this project useful, please give it a ⭐ on GitHub!
+
+Made with ❤️ by Malak Ragab
+
+text
+
+---
+
+## 🚀 **How to Add README to GitHub**
+
+```bash
+# 1. Create README.md with the content above
+# 2. Add and commit
+git add README.md
+git commit -m "Add clean hierarchical README for vision service"
+git push origin main
